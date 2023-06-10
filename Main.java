@@ -1,6 +1,9 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.ResultSet;
 import java.util.Scanner;
+
+import Data.DbContext;
 
 import classes.Conta;
 import classes.ContaCorrente;
