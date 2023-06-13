@@ -1,0 +1,22 @@
+create table public.pessoas
+(
+	id serial primary key,
+	nome text not null,
+	cpf text not null
+);
+
+alter table if exists public.pessoas
+	owner to postgres;
+	
+create table public.contas
+(
+	id serial primary key,
+	pessoa_id int,
+	numConta int not null,
+	tipoConta text not null,
+	saldo decimal(10,2),
+	foreign key (pessoa_id) references pessoas(id)
+);
+
+alter table if exists public.contas
+	owner to postgres;

@@ -19,17 +19,16 @@ public class DbContext {
     // MÉTODO RESPONSAVEL POR REALIZAR CONEXÃO COM O BANCO DE DADOS
     public void conectarBanco() {
         try {
-			this.connection = DriverManager.getConnection(this.url, this.usuario, this.senha);
-        }
-        catch (Exception e) {
+            this.connection = DriverManager.getConnection(this.url, this.usuario, this.senha);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-	}
+    }
 
     // MÉTODO RESPONSAVEL POR DESCONECTAR DO BANCO DE DADOS
     public void desconectarBanco() {
         try {
-            this.connection.close();        
+            this.connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +48,8 @@ public class DbContext {
         }
     }
 
-    // MÉTODO RESPONSAVEL POR REALIZAR UMA QUERY QUE NÃO NECESSITA DE RETORNO (INSERT/UPDATE/DELETE)
+    // MÉTODO RESPONSAVEL POR REALIZAR UMA QUERY QUE NÃO NECESSITA DE RETORNO
+    // (INSERT/UPDATE/DELETE)
     public boolean executarUpdateSql(String query) {
         try {
             Statement stmt = this.connection.createStatement();
