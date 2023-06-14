@@ -1,25 +1,27 @@
-import java.util.HashMap;
-import java.util.Map;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+
 
 import Data.DbContext;
-import classes.Conta;
-import classes.ContaCorrente;
-import classes.ContaPoupanca;
-import classes.Pessoa;
+
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("---------------------");
+        System.out.println("----- BEM VINDO -----");
         start();
     }
 
     public static void start() {
 
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("\n ----- BEM VINDO ----- \n");
-        System.out.println("Selecionoe uma opção: \n");
+        
+        System.out.println("---------------------");
+        System.out.println("\n Selecionoe uma opção: \n");
         System.out.println("1 - Cadastrar Pessoa");
         System.out.println("2 - Listar Pessoas");
         System.out.print("\n Opção: ");
@@ -45,41 +47,54 @@ public class Main {
     }
 
     public static void cadastrarPessoa() {
-        System.out.println("\n Informe o nome da Pessoa: ");
-
         Scanner scanner = new Scanner(System.in);
 
-        if (scanner.hasNext()) {
+        System.out.println("\n Informe o nome da Pessoa: ");
+        String nome = scanner.next();
+        System.out.println("\n Informe o cpf da Pessoa: ");
+        String cpf = scanner.next();
 
-            String nome = scanner.next();
+        DbContext database = new DbContext();
 
-            DbContext database = new DbContext();
-
-            try {
-                database.conectarBanco();
-
+        try {
+            database.conectarBanco();
+            boolean pessoaExistente = verificarPessoaExistente(database, nome, cpf);
+            if (pessoaExistente) {
+                mensagemStatus("CPF ja cadastrado!");
+            } else {
                 boolean statusQuery = database
-                        .executarUpdateSql("INSERT INTO public.pessoas(nome) VALUES ('" + nome + "')");
-
+                        .executarUpdateSql(
+                                "INSERT INTO public.pessoa(nome,cpf) VALUES ('" + nome + "', '" + cpf + "')");
                 if (statusQuery) {
-                    mensagemStatus("Novo animal cadastrado com sucesso !");
+                    mensagemStatus(" '"+ nome +"' foi cadastrado(a)!");
                 }
-
-                database.desconectarBanco();
-
-            } catch (Exception e) {
             }
+            database.desconectarBanco();
+        } catch (Exception e) {
+        }
+        start();
+    }
+
+    public static boolean verificarPessoaExistente(DbContext database, String nome, String cpf) throws SQLException {
+        String query = "SELECT COUNT(*) FROM public.pessoa WHERE cpf = '" + cpf + "'";
+        ResultSet resultSet = database.executarQuerySql(query);
+
+        if (resultSet.next()) {
+            int count = resultSet.getInt(1);
+            return count > 0;
         }
 
+        return false;
     }
 
     public static void mensagemStatus(String mensagem) {
-		System.out.print("\n");
-		System.out.print("---------------------");
-		System.out.print("\n " + mensagem + " \n");
-		System.out.print("---------------------");
-		System.out.print("\n");
-	};}
+        System.out.print("\n");
+        System.out.print("---------------------");
+        System.out.print("\n " + mensagem + " \n");
+        System.out.print("---------------------");
+        System.out.print("\n");
+    };
+}
 
 /*
  * 
