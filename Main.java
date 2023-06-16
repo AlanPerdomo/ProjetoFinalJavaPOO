@@ -39,7 +39,7 @@ public class Main {
                     Pessoa.listarPessoas();
                     break;
                 case 3:
-                    //criarConta();
+                    Conta.criarConta();
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -48,5 +48,10 @@ public class Main {
             System.out.println("Entrada inválida! Digite um número correspondente à opção desejada.");
             scanner.nextLine(); // Limpar o buffer do scanner
         }
+    }
+    public static void mensagemStatus(String mensagem) {
+        System.out.print("\n");
+        System.out.print("---------------------");
+        System.out.print("\n " + mensagem + " \n");
     }
 }
