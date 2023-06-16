@@ -30,8 +30,8 @@ public abstract class Conta {
         String cpf = scanner.next();
 
         if (!Pessoa.validarCPF(cpf)) {
-            mensagemStatus("O CPF informado é inválido!");
-            start();
+            Main.mensagemStatus("O CPF informado é inválido!");
+            Main.start();
             return;
         }
 
@@ -41,7 +41,7 @@ public abstract class Conta {
             database.conectarBanco();
             boolean pessoaExistente = verificarPessoaExistente(database, nome, cpf);
             if (pessoaExistente) {
-                mensagemStatus("CPF já cadastrado!");
+                Main.mensagemStatus("CPF já cadastrado!");
             } else {
                 boolean statusQuery = database.executarUpdateSql(
                         "INSERT INTO public.pessoa(nome,cpf) VALUES ('" + nome + "', '" + cpf + "')");
@@ -52,7 +52,7 @@ public abstract class Conta {
             database.desconectarBanco();
         } catch (Exception e) {
         }
-        start();
+        Main.start();
     }
 
 }
