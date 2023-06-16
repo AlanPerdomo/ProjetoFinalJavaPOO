@@ -58,7 +58,7 @@ public class Pessoa {
         String nome = scanner.nextLine().trim();
 
         if (!validarNome(nome)) {
-            mensagemStatus("O nome informado é inválido!");
+            Main.mensagemStatus("O nome informado é inválido!");
             start();
             return;
         }
@@ -67,7 +67,7 @@ public class Pessoa {
         String cpf = scanner.next();
 
         if (!validarCPF(cpf)) {
-            mensagemStatus("O CPF informado é inválido!");
+            Main.mensagemStatus("O CPF informado é inválido!");
             start();
             return;
         }
@@ -78,12 +78,12 @@ public class Pessoa {
             database.conectarBanco();
             boolean pessoaExistente = verificarPessoaExistente(database, nome, cpf);
             if (pessoaExistente) {
-                mensagemStatus("CPF já cadastrado!");
+                Main.mensagemStatus("CPF já cadastrado!");
             } else {
                 boolean statusQuery = database.executarUpdateSql(
                         "INSERT INTO public.pessoa(nome,cpf) VALUES ('" + nome + "', '" + cpf + "')");
                 if (statusQuery) {
-                    mensagemStatus("'" + nome + "' foi cadastrado(a)!");
+                    Main.mensagemStatus("'" + nome + "' foi cadastrado(a)!");
                 }
             }
             database.desconectarBanco();
@@ -116,12 +116,6 @@ public class Pessoa {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(cpf);
         return matcher.matches();
-    }
-
-    public static void mensagemStatus(String mensagem) {
-        System.out.print("\n");
-        System.out.print("---------------------");
-        System.out.print("\n " + mensagem + " \n");
     }
 
     public static void start() {

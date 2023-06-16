@@ -1,22 +1,22 @@
-create table public.pessoas
+create table public.pessoa
 (
 	id serial primary key,
 	nome text not null,
 	cpf text not null
 );
 
-alter table if exists public.pessoas
+alter table if exists public.pessoa
 	owner to postgres;
 	
-create table public.contas
+create table public.conta
 (
 	id serial primary key,
 	pessoa_id int,
 	numConta int not null,
 	tipoConta text not null,
 	saldo decimal(10,2),
-	foreign key (pessoa_id) references pessoas(id)
+	foreign key (pessoa_id) references pessoa(id)
 );
 
-alter table if exists public.contas
+alter table if exists public.conta
 	owner to postgres;
