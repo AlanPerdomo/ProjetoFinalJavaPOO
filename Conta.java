@@ -88,28 +88,24 @@ public abstract class Conta {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nInforme o CPF da Pessoa: ");
-        String cpf = scanner.next(); 
+        String cpf = scanner.next();
 
         if (!Pessoa.validarCPF(cpf)) {
             Main.mensagemStatus("O CPF informado é inválido!");
             Main.start();
             return;
         }
-        
-
-
-
 
         DbContext database = new DbContext();
 
         try {
             database.conectarBanco();
-
-            ResultSet resultadoConsulta = database.executarQuerySql("SELECT * FROM public.contas");
+            ResultSet resultadoConsulta = database.executarQuerySql("SELECT * FROM public.contas WHERE cpf ='" + cpf + "'");
 
             while (resultadoConsulta.next()) {
-                System.out.println("ID - " + resultadoConsulta.getString("id") + " | NOME - "
-                        + resultadoConsulta.getString("nome"));
+                System.out.println("ID - " + resultadoConsulta.getString("id") + " | Numero da conta - "
+                        + resultadoConsulta.getString("numconta") + " | Tipo de Conta - "
+                        + resultadoConsulta.getString("tipoconta"));
             }
 
             database.desconectarBanco();
