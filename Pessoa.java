@@ -37,10 +37,11 @@ public class Pessoa {
         try {
             database.conectarBanco();
 
-            ResultSet resultadoConsulta = database.executarQuerySql("SELECT * FROM public.pessoa");
+            ResultSet resultadoConsulta = database.executarQuerySql("SELECT * FROM public.pessoas");
 
             while (resultadoConsulta.next()) {
-                System.out.println("ID - " + resultadoConsulta.getString("id") + " | NOME - " + resultadoConsulta.getString("nome"));
+                System.out.println("ID - " + resultadoConsulta.getString("id") + " | NOME - "
+                        + resultadoConsulta.getString("nome") + " | CPF - " + resultadoConsulta.getString("cpf"));
             }
 
             database.desconectarBanco();
@@ -76,12 +77,12 @@ public class Pessoa {
 
         try {
             database.conectarBanco();
-            boolean pessoaExistente = verificarPessoaExistente(database, nome, cpf);
+            boolean pessoaExistente = verificarPessoaExistente(database, cpf);
             if (pessoaExistente) {
                 Main.mensagemStatus("CPF já cadastrado!");
             } else {
                 boolean statusQuery = database.executarUpdateSql(
-                        "INSERT INTO public.pessoa(nome,cpf) VALUES ('" + nome + "', '" + cpf + "')");
+                        "INSERT INTO public.pessoas(nome,cpf) VALUES ('" + nome + "', '" + cpf + "')");
                 if (statusQuery) {
                     Main.mensagemStatus("'" + nome + "' foi cadastrado(a)!");
                 }
@@ -92,8 +93,8 @@ public class Pessoa {
         start();
     }
 
-    public static boolean verificarPessoaExistente(DbContext database, String nome, String cpf) throws SQLException {
-        String query = "SELECT COUNT(*) FROM public.pessoa WHERE cpf = '" + cpf + "'";
+    public static boolean verificarPessoaExistente(DbContext database, String cpf) throws SQLException {
+        String query = "SELECT COUNT(*) FROM public.pessoas WHERE cpf = '" + cpf + "'";
         ResultSet resultSet = database.executarQuerySql(query);
 
         if (resultSet.next()) {

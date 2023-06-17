@@ -9,7 +9,7 @@ public class DbContext {
 
     private String url = "jdbc:postgresql://localhost:5432/banco";
     private String usuario = "postgres";
-    private String senha = "Estacio@123";
+    private String senha = "1234";
 
     public Connection connection = null;
 

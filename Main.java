@@ -24,6 +24,7 @@ public class Main {
         System.out.println("1 - Cadastrar Pessoa");
         System.out.println("2 - Listar Pessoas");
         System.out.println("3 - Criar Conta");
+        System.out.println("4 - Listar Contas");
 
         System.out.print("\n Opção: ");
 
@@ -40,6 +41,9 @@ public class Main {
                     break;
                 case 3:
                     Conta.criarConta();
+                    break;
+                case 4:
+                    Conta.listarContas();
                     break;
                 default:
                     System.out.println("Opção inválida!");
