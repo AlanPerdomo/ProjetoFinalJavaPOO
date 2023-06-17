@@ -25,6 +25,9 @@ public class Main {
         System.out.println("2 - Listar Pessoas");
         System.out.println("3 - Criar Conta");
         System.out.println("4 - Listar Contas");
+        System.out.println("5 - Depositar");
+        System.out.println("6 - Sacar");
+
 
         System.out.print("\n Opção: ");
 
@@ -45,7 +48,10 @@ public class Main {
                 case 4:
                     Conta.listarContas();
                     break;
+                case 5:
+                    Conta.depositar();
                 default:
+                    Conta.sacar();
                     System.out.println("Opção inválida!");
             }
         } catch (Exception e) {
