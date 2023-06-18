@@ -49,9 +49,12 @@ public class Main {
                     Conta.listarContas();
                     break;
                 case 5:
-                    Conta.depositar();
+                    //Conta.depositar();
+                    break;
+                case 6:
+                    //Conta.sacar();
+                    break;
                 default:
-                    Conta.sacar();
                     System.out.println("Opção inválida!");
             }
         } catch (Exception e) {

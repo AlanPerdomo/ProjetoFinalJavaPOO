@@ -15,6 +15,9 @@ public class Pessoa {
         this.cpf = cpf;
     }
 
+    public Pessoa() {
+    }
+
     public String getNome() {
         return nome;
     }
@@ -81,6 +84,7 @@ public class Pessoa {
             if (pessoaExistente) {
                 Main.mensagemStatus("CPF já cadastrado!");
             } else {
+                Pessoa pessoa = new Pessoa(nome, cpf);
                 boolean statusQuery = database.executarUpdateSql(
                         "INSERT INTO public.pessoas(nome,cpf) VALUES ('" + nome + "', '" + cpf + "')");
                 if (statusQuery) {

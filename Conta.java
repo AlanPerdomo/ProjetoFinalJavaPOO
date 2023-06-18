@@ -84,7 +84,6 @@ public abstract class Conta {
     }
 
     public static void listarContas() {
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nInforme o CPF da Pessoa: ");
@@ -100,12 +99,30 @@ public abstract class Conta {
 
         try {
             database.conectarBanco();
-            ResultSet resultadoConsulta = database.executarQuerySql("SELECT * FROM public.contas WHERE cpf ='" + cpf + "'");
 
-            while (resultadoConsulta.next()) {
-                System.out.println("ID - " + resultadoConsulta.getString("id") + " | Numero da conta - "
-                        + resultadoConsulta.getString("numconta") + " | Tipo de Conta - "
-                        + resultadoConsulta.getString("tipoconta"));
+            ResultSet resultadoPessoa = database
+                    .executarQuerySql("SELECT * FROM public.pessoas WHERE cpf ='" + cpf + "'");
+            if (!resultadoPessoa.next()) {
+                System.out.println("Não foi possível encontrar informações da Pessoa com o CPF informado.");
+                database.desconectarBanco();
+                Main.start();
+                return;
+            }
+
+            String nomePessoa = resultadoPessoa.getString("nome");
+
+            ResultSet resultadoConsulta = database
+                    .executarQuerySql("SELECT * FROM public.contas WHERE cpf ='" + cpf + "'");
+
+            if (!resultadoConsulta.isBeforeFirst()) {
+                System.out.println("Não há contas cadastradas para " + nomePessoa + " (CPF: " + cpf + ").");
+            } else {
+                System.out.println("Contas cadastradas para " + nomePessoa + " (CPF: " + cpf + "):");
+                while (resultadoConsulta.next()) {
+                    System.out.println("ID - " + resultadoConsulta.getString("id") + " | Numero da conta - "
+                            + resultadoConsulta.getString("numconta") + " | Tipo de Conta - "
+                            + resultadoConsulta.getString("tipoconta"));
+                }
             }
 
             database.desconectarBanco();
