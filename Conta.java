@@ -1,27 +1,74 @@
 import java.sql.ResultSet;
 import java.util.Scanner;
-
 import Data.DbContext;
 
 public abstract class Conta {
-    public int numeroConta;
-    public Pessoa nome;
-    public double saldo;
+    public static int numconta;
+    public static Pessoa cpf;
+    public static double saldo;
 
-    public Conta(int numeroConta, Pessoa nome, double saldo) {
-        this.numeroConta = numeroConta;
-        this.nome = nome;
-        this.saldo = saldo;
+    public Conta(int numconta, Pessoa cpf, double saldo) {
+        Conta.numconta = numconta;
+        Conta.cpf = cpf;
+        Conta.saldo = saldo;
     }
 
-    public abstract void sacar(double valor);
+    public void sacar(double valor) {
+        saldo -= valor;
+    };
 
-    public void depositar(double valor) {
-        saldo += valor;
+    public abstract void depositar(double valor);
+
+    public static void fazerDeposito() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\nInforme o numero da conta: ");
+        numconta = scanner.nextInt();
+        String tipoConta = verificarTipoConta(numconta);
+        double valor;
+
+        System.out.println("\nInforme o valor: ");
+        valor = scanner.nextDouble();
+
+        try {
+            switch (tipoConta) {
+                case "contaCorrente":
+                    ContaCorrente contaCorrente = new ContaCorrente(numconta, cpf, saldo);
+                    contaCorrente.depositar(valor);
+                    break;
+                case "contaPoupanca":
+                    ContaPoupanca contaPoupanca = new ContaPoupanca(numconta, cpf, saldo);
+                    contaPoupanca.depositar(valor);
+                    break;
+                default:
+                    System.out.println("Conta inválida!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public double consultarSaldo() {
-        return saldo;
+    public static double consultarSaldo(int numeroConta) {
+        DbContext database = new DbContext();
+
+        try {
+            database.conectarBanco();
+
+            ResultSet resultadoConta = database.executarQuerySql(
+                    "SELECT saldo FROM public.contas WHERE numconta = " + numeroConta);
+
+            if (resultadoConta.next()) {
+                return resultadoConta.getDouble("saldo");
+            } else {
+                System.out.println("Não foi possível encontrar a conta com o número informado.");
+                return 0.0; // ou outro valor indicando um saldo inválido
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0; // ou outro valor indicando um saldo inválido
+        } finally {
+            database.desconectarBanco();
+        }
     }
 
     public static void criarConta() {
@@ -45,10 +92,10 @@ public abstract class Conta {
             if (pessoaExistente) {
 
                 System.out.println("---------------------");
-                System.out.println("\n Selecionoe o tipo de conta: \n");
+                System.out.println("\nSelecione o tipo de conta: \n");
                 System.out.println("1 - Conta Corrente");
                 System.out.println("2 - Conta Poupança");
-                System.out.print("\n Opção: ");
+                System.out.print("\nOpção: ");
 
                 try {
                     int opcao = scanner.nextInt();
@@ -63,6 +110,8 @@ public abstract class Conta {
                             break;
                         default:
                             System.out.println("Opção inválida!");
+                            Main.start();
+                            return;
                     }
 
                     boolean statusQuery = database.executarUpdateSql(
@@ -71,14 +120,18 @@ public abstract class Conta {
                         Main.mensagemStatus("'" + tipoConta + "' foi criada!");
                     }
                 } catch (Exception e) {
-                    System.out.println("Entrada inválida! Digite um número correspondente à opção desejada.");
-                    scanner.nextLine(); // Limpar o buffer do scanner
+                    e.printStackTrace();
+                    Main.start();
+                    return;
                 }
             } else {
                 Main.mensagemStatus("CPF não cadastrado!");
             }
             database.desconectarBanco();
         } catch (Exception e) {
+            e.printStackTrace();
+            Main.start();
+            return;
         }
         Main.start();
     }
@@ -128,9 +181,33 @@ public abstract class Conta {
             database.desconectarBanco();
 
         } catch (Exception e) {
+            e.printStackTrace();
+            Main.start();
+            return;
         }
 
         Main.start();
     }
 
+    public static String verificarTipoConta(int numeroConta) {
+        DbContext database = new DbContext();
+
+        try {
+            database.conectarBanco();
+
+            ResultSet resultadoConta = database.executarQuerySql(
+                    "SELECT tipoconta FROM public.contas WHERE numconta = " + numeroConta);
+
+            if (resultadoConta.next()) {
+                return resultadoConta.getString("tipoconta");
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            database.desconectarBanco();
+        }
+    }
 }

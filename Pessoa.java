@@ -1,4 +1,3 @@
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
@@ -50,6 +49,7 @@ public class Pessoa {
             database.desconectarBanco();
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         start();
@@ -93,6 +93,7 @@ public class Pessoa {
             }
             database.desconectarBanco();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         start();
     }

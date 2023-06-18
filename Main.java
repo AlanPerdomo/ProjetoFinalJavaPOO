@@ -1,10 +1,4 @@
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import Data.DbContext;
-
 
 public class Main {
     public static void main(String[] args) {
@@ -13,23 +7,20 @@ public class Main {
         start();
     }
 
-
-
     public static void start() {
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("---------------------");
-        System.out.println("\n Selecionoe uma opção: \n");
+        System.out.println("\nSelecione uma opção:\n");
         System.out.println("1 - Cadastrar Pessoa");
         System.out.println("2 - Listar Pessoas");
         System.out.println("3 - Criar Conta");
         System.out.println("4 - Listar Contas");
         System.out.println("5 - Depositar");
         System.out.println("6 - Sacar");
+        System.out.println("7 - Saldo");
 
-
-        System.out.print("\n Opção: ");
+        System.out.print("\nOpção: ");
 
         try {
             int opcao = scanner.nextInt();
@@ -49,10 +40,16 @@ public class Main {
                     Conta.listarContas();
                     break;
                 case 5:
-                    //Conta.depositar();
+                    Conta.fazerDeposito();
                     break;
                 case 6:
-                    //Conta.sacar();
+                    // Conta.sacar();
+                    break;
+                case 7:
+                    // Conta.imprimeSaldo();
+                    System.out.println("\nInforme o numero da conta: ");
+                    int numconta = scanner.nextInt();
+                    double saldoConta = Conta.consultarSaldo(numconta);
                     break;
                 default:
                     System.out.println("Opção inválida!");
@@ -61,10 +58,12 @@ public class Main {
             System.out.println("Entrada inválida! Digite um número correspondente à opção desejada.");
             scanner.nextLine(); // Limpar o buffer do scanner
         }
+        start();
     }
+
     public static void mensagemStatus(String mensagem) {
-        System.out.print("\n");
+        System.out.println("\n---------------------");
+        System.out.println(mensagem);
         System.out.print("---------------------");
-        System.out.print("\n " + mensagem + " \n");
     }
 }
